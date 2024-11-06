@@ -1,0 +1,75 @@
+1. Projeto de Banco de Dados: Sistema de Gestão de Clientes (MySQL)
+Este código cria um banco de dados e um sistema simples para gerenciar clientes. Ele inclui a modelagem de dados (tabelas) e algumas operações básicas como inserção, atualização, consulta e exclusão de dados.
+-- Criação do banco de dados
+
+CREATE DATABASE IF NOT EXISTS SistemaGestaoClientes;
+
+-- Seleciona o banco de dados
+USE SistemaGestaoClientes;
+
+-- Criação da tabela 'clientes'
+CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    telefone VARCHAR(20),
+    data_nascimento DATE,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Inserção de dados
+INSERT INTO clientes (nome, email, telefone, data_nascimento) 
+VALUES ('Allison Lopes', 'allison@email.com', '(11) 98765-4321', '1995-06-15'),
+       ('Maria Silva', 'maria@email.com', '(11) 91234-5678', '1992-10-23');
+
+-- Consulta de todos os clientes
+SELECT * FROM clientes;
+
+-- Atualização de dados
+UPDATE clientes 
+SET telefone = '(11) 99999-8888' 
+WHERE id = 1;
+
+-- Exclusão de um cliente
+DELETE FROM clientes 
+WHERE id = 2;
+
+
+2. Script de Otimização de Consultas SQL
+script de otimização de consulta SQL usando índices e análise de performance. Este código cria um índice em uma tabela e realiza uma consulta otimizada.
+
+-- Criação da tabela 'vendas'
+CREATE TABLE IF NOT EXISTS vendas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Criação de um índice para otimizar consultas por 'cliente_id' e 'data_venda'
+CREATE INDEX idx_cliente_data ON vendas (cliente_id, data_venda);
+
+-- Inserção de dados de exemplo
+INSERT INTO vendas (cliente_id, produto_id, quantidade, preco) 
+VALUES (1, 101, 2, 150.00),
+       (2, 102, 1, 80.00),
+       (1, 103, 3, 250.00);
+
+-- Consulta otimizada usando o índice
+EXPLAIN ANALYZE 
+SELECT cliente_id, SUM(preco * quantidade) AS total_vendas
+FROM vendas
+WHERE cliente_id = 1
+GROUP BY cliente_id
+ORDER BY total_vendas DESC;
+
+-- Atualização de dados de venda
+UPDATE vendas 
+SET preco = 200.00 
+WHERE id = 1;
+
+-- Exclusão de vendas antigas
+DELETE FROM vendas 
+WHERE data_venda < '2023-01-01';
