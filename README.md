@@ -1,0 +1,1 @@
+otimização_consultas.sql
